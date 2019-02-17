@@ -64,6 +64,44 @@ function createPark() {
     })
 };
 
+function updatePark() {
+  client.query("SELECT parks_name as parks_name FROM public.parks",
+    function (err, results) {
+      if (err) throw err;
+      // console.log(results);
+      inquirer.prompt([{
+          name: "choice",
+          type: "rawlist",
+          choices: function () {
+            var choiceArray = [];
+
+            for (var i = 0; i < results.rows.length; i++) {
+              choiceArray.push(results.rows[i].parks_name);
+            }
+            return choiceArray;
+          },
+          message: "Which park have you visited?"
+        }])
+        .then(function (answer) {
+          const text = `UPDATE public.parks SET visited = true WHERE parks_name = $1`;
+          const value = [answer.choice];
+          client.query(text, value, (err, res) => {
+            if (err) {
+              console.log(err.stack)
+            } else {
+              // console.log(res)
+              console.log("----------------------------------");
+              console.log(answer.choice + " has been set to Visited!");
+              console.log("----------------------------------")
+              optionsMenu();
+            }
+
+          })
+        })
+    }
+  )
+}
+
 
 function deletePark() {
   client.query("SELECT parks_name as parks_name FROM public.parks",
