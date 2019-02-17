@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/apetteruti/postgres#readme",
   "dependencies": {
+    "easy-table": "^1.1.1",
+    "inquirer": "^6.2.2",
     "pg": "^7.8.0"
   }
 }
